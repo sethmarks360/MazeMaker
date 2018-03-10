@@ -1,18 +1,23 @@
-# MazeMaker
-//Programmer: Seth M. Marks
 
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
+	
+	import java.util.Scanner;
 
-public class MazeMaker 
-{
+
+	public class MazeMaker {
+	
 	//The Main Method
+	
 	public static void main(String[] args) throws IOException 
+	
 	{	
+		
 		//Gather data from the user. The user will enter the amount of rows and columns they want the maze to be
+		
+		
 		Scanner keyboard = new Scanner(System.in);
 		
 		System.out.print("Please enter the amount of rows you'd like this maze to be: ");
