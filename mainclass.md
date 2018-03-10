@@ -1,9 +1,8 @@
 
-import java.awt.Point;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
-	
+	import java.awt.Point;
+	import java.io.IOException;
+	import java.util.ArrayList;
+	import java.util.Random;
 	import java.util.Scanner;
 
 
