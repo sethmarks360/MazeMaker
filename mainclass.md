@@ -1,146 +1,99 @@
-
 	import java.awt.Point;
-	import java.io.IOException;
-	import java.util.ArrayList;
+	
 	import java.util.Random;
-	import java.util.Scanner;
 
+	public class MazeHolder
 
-	public class MazeMaker {
+	{
 	
-	//The Main Method
+	//Instance variables necessary to Maze construction
 	
-	public static void main(String[] args) throws IOException 
+	private char[][] theMaze;
 	
-	{	
+	private int rows;
+	
+	private int columns;
+	
+	Random generator = new Random();
+	//Constructor which creates the Maze using the user's command line arguments
+	public MazeHolder(int rows, int columns)
+	{
+		this.rows = rows; //set's object's rows to be the one entered in parameter
+		this.columns = columns; //set's object's columns to be the one entered in parameter
 		
-		//Gather data from the user. The user will enter the amount of rows and columns they want the maze to be
+		theMaze = new char[rows*2 + 1][columns*2 + 1]; //allocate new array of 2*paramter + 1 size
 		
-		
-		Scanner keyboard = new Scanner(System.in);
-		
-		System.out.print("Please enter the amount of rows you'd like this maze to be: ");
-		int rows = keyboard.nextInt();
-		
-		System.out.print("Please enter the amount of columns you'd like this maze to be: ");
-		int columns = keyboard.nextInt();
-		
-		keyboard.close();
-		
-		//Print out the numbers that the user entered
-		System.out.println("You entered: " + rows + " rows and " + columns + " columns.");
-		
-		//Print out the numbers that are going to represent the actual maze
-		System.out.println("This is viewed as a " + (rows * 2 + 1) + " by " + (columns * 2 + 1) + " maze.");
-		
-		
-		MazeHolder theMaze = new MazeHolder(rows, columns); //constructs the maze using the MazeHolder class
-		
-		Stack theStack = new Stack(); //initialize a new stack 
-		
-		Point firstPoint = theMaze.firstCut();
-		
-		theStack.push(firstPoint); //add the end point of firstCut() to the top of the stack
-		
-		while(theStack.isNotEmpty()) //loop continues as long as stack has at least one object on it
+		for (int r = 0; r < rows*2 + 1; r++)
 		{
-			
-			ArrayList<String> ways = new ArrayList<String>(); //initialize ArrayList of possible directions
-			String direction = "";
-			
-			if(theStack.peek().getX() - 1 != -1 && theMaze.get(theStack.peek().getX() - 1, theStack.peek().getY()) != ' ') //if able to go up, add up as an option
-				ways.add("Up");
-			if(theStack.peek().getX() + 1 != theMaze.rows() && theMaze.get(theStack.peek().getX() + 1, theStack.peek().getY()) != ' ') //if able to go down, add up as an option
-				ways.add("Down");
-			if(theStack.peek().getY() - 1 != -1 && theMaze.get(theStack.peek().getX(), theStack.peek().getY() - 1) != ' ') //if able to go left, add it as an option
-				ways.add("Left");
-			if(theStack.peek().getY() + 1 != theMaze.columns() && theMaze.get(theStack.peek().getX(), theStack.peek().getY() + 1) != ' ') //if able to go right, add it as an option
-				ways.add("Right");
-			
-			if(ways.size() > 0) //as long as there is at least one possible direction to go
+			for (int c = 0; c < columns*2 + 1; c++)
 			{
-				Random generator = new Random(); // make a new random number generator
-				direction = ways.get(generator.nextInt(ways.size())); //find random index of ArrayList that is the size of number of possible directions
-				
-				//if statements which control where the maze will be cleared
-				if(direction.equals("Up"))
-				{
-					Point point = new Point(); 
-					point.setLocation(theStack.peek().getX() - 1, theStack.peek().getY());
-					theMaze.delete(theStack.peek().getX()* 2, theStack.peek().getY()* 2 + 1);
-					theMaze.delete(theStack.peek().getX()* 2 - 1, theStack.peek().getY()* 2 + 1);
-					theStack.push(point);
-					ways.clear();
-				}
-				
-				else if(direction.equals("Down"))
-				{
-					Point point = new Point(); 
-					point.setLocation(theStack.peek().getX() + 1, theStack.peek().getY());
-					theMaze.delete(theStack.peek().getX()* 2 + 2, theStack.peek().getY()* 2 + 1);
-					theMaze.delete(theStack.peek().getX()* 2 + 3, theStack.peek().getY()* 2 + 1);
-					theStack.push(point);
-					ways.clear();
-				}
-				else if(direction.equals("Left"))
-				{
-					Point point = new Point(); 
-					point.setLocation(theStack.peek().getX(), theStack.peek().getY() - 1);
-					theMaze.delete(theStack.peek().getX()* 2 + 1, theStack.peek().getY()* 2);
-					theMaze.delete(theStack.peek().getX()* 2 + 1, theStack.peek().getY()* 2 - 1);
-					theStack.push(point);
-					ways.clear();
-				}
-				else if(direction.equals("Right"))
-				{
-					Point point = new Point(); 
-					point.setLocation(theStack.peek().getX(), theStack.peek().getY() + 1);
-					theMaze.delete(theStack.peek().getX()* 2 + 1, theStack.peek().getY()* 2 + 2);
-					theMaze.delete(theStack.peek().getX()* 2 + 1, theStack.peek().getY()* 2 + 3);
-					theStack.push(point);	
-					ways.clear();
-				}
-			}
-				
-				else
-				{
-					theStack.pop(); //if there is no available direction to go, remove the top location from the stack
-				}
-			
-		}
-		
-		Random maker = new Random(); //another random number generator
-		
-		int n = 0; //n, a variable to control the while loops
-		
-		while (n == 0) //loop will continue until an appropriate spot is found to make an entrance
-		{
-			int rowToDelete = maker.nextInt(theMaze.rows());
-			
-			if (theMaze.get(rowToDelete, 0) != '@' && rowToDelete != 0)
-			{
-				theMaze.delete(rowToDelete * 2 + 1, 0);
-				n = 1; //make n equal to 1 to escape the while loop
+				theMaze[r][c] = '@'; //all characters are '@'s
 			}
 		}
-		
-		n = 0; //set n back to 0, so another while loop can start
-		
-		while (n == 0) //loop will continue until an appropriate spot is found to make an exit
-		{
-			int place = maker.nextInt(theMaze.rows()); //find a row to make the maze exit
-			
-			if(theMaze.get(place, theMaze.columns() - 1) != '@' && place != 0)
-			{
-				theMaze.delete(place * 2 + 1, theMaze.columns() * 2);
-				n = 1; //set while condition to a different number to terminate the loop
-			}
-		}
-		//use the method that displays the maze as a String
-		System.out.println(theMaze.toString());
-		
-		
 	}
+	//METHOD: firstCut()
+	//Purpose: cut a random group of characters out of the Maze and push the end point
+	//Returns: the end point of the random cut
+	//Parameters: none
+	public Point firstCut()
+	{
+		int x = generator.nextInt(this.rows); //Random row
+		int y = generator.nextInt(this.columns); //Random column
 
+		theMaze[x*2 + 1][y*2 + 1] = ' '; //Delete modified row and column index
+		
+		Point p = new Point (x, y); //End point to return
+		
+		return p;
+	}
+	//METHOD: get()
+	//Purpose: retrieve the charcater at a given point in the maze
+	//Returns: the desired character, either '#' or ' '
+	//Parameters: row and column number
+	public char get(double row, double column)
+	{
+		int r = (int) (row*2 + 1); 
+		int c = (int) (column*2 + 1); 
+		return theMaze[r][c];
+	}
+	//METHOD: delete()
+	//Purpose: delete any character in the maze
+	//Returns: nothing, but modifies object
+	//Parameters: row and column number to delete
+	public void delete(double r, double c)
+	{
+		theMaze[(int) r][(int) c] = ' ';
+	}
+	//METHOD: toString()
+	//Purpose: turn the Maze into a String object so it can be displayed
+	//Returns: a String that is the representation of the Maze
+	//Parameters: none
+	public String toString()
+	{
+		String mazeString = "";
+		
+		for (int r = 0; r < this.rows*2 + 1; r++)
+		{
+			for (int c = 0; c < this.columns*2 + 1; c++)
+			{
+				mazeString = mazeString + theMaze[r][c];
+			}
+			
+			mazeString += "\n"; //add a new line after each line to give Maze a block shape
+		}
+		
+		return mazeString;
+	}
+	
+	//This method returns the current number of rows held by the object
+	public int rows()
+	{
+		return this.rows;
+	}
+	//This method returns the current number of columns held by the object
+	public int columns()
+	{
+		return this.columns;
+	}
+//End of Class	
 }
-
