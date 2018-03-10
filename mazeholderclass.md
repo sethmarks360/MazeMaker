@@ -2,7 +2,7 @@
     import java.util.Random;
 
     public class MazeHolder
-      {
+    {
       //Instance variables necessary to Maze construction
       private char[][] theMaze;
       private int rows;
