@@ -1,8 +1,3 @@
-//Programmer: Seth M. Marks
-//Section Leader: Jesse D. Bartels
-//Instructor: Lester I. McCann
-//Class: Main class Program6
-
 //Necessary imports
 import java.awt.Point;
 import java.io.IOException;
